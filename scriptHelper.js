@@ -17,27 +17,56 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
 }
 
 function validateInput(testInput) {
-   
-}
+    let answer;
+
+   if (isNaN(testInput)) {
+        answer = "Not a number";
+   } else if (!isNaN(testInput)) {
+        answer = "Is a number";
+   } else if (testInput === "") {
+        answer = "Empty";
+   }; 
+
+   return answer;
+};
+
+// console.log(validateInput(7));
+
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-   
+    const form = document.querySelector("form");
+    // const copilotInput = document.querySelector("input[name=copilotName]");
+    // const fuelLevelInput = document.querySelector("input[name=fuelLevel]");
+    // const cargoLevelInput = document.querySelector("input[name=cargoMass]");
+    
+
+
+    form.addEventListener("submit", function(event) {
+        const pilotInput = document.querySelector("input[name=pilotName]");
+        const validatedPilotInput = validateInput(pilotInput.value);
+        if (validatedPilotInput === "Empty" || validatedPilotInput === "Is a number") {
+            alert("Please enter a Pilot name.");
+            event.preventDefault();
+        };
+    });
 }
-
 async function myFetch() {
-    let planetsReturned;
-
-    planetsReturned = await fetch().then( function(response) {
-        });
-
+    const planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+        response.json().then(function(json) {
+            console.log(json)
+;        });
     return planetsReturned;
+    });
 }
 
 function pickPlanet(planets) {
+    
 }
 
-module.exports.addDestinationInfo = addDestinationInfo;
-module.exports.validateInput = validateInput;
-module.exports.formSubmission = formSubmission;
-module.exports.pickPlanet = pickPlanet; 
-module.exports.myFetch = myFetch;
+module.exports = {
+    addDestinationInfo: addDestinationInfo,
+    validateInput: validateInput,
+    formSubmission: formSubmission,
+    pickPlanet: pickPlanet,
+    myFetch: myFetch,
+}
