@@ -3,17 +3,21 @@ require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
    // Here is the HTML formatting for our mission target div.
-   /*
-                <h2>Mission Destination</h2>
+
+   const missionTarget = document.getElementById("missionTarget");
+   const planetDestination = myFetch();
+
+   missionTarget.innerHTML = 
+`                <h2>Mission Destination</h2>
                 <ol>
-                    <li>Name: </li>
-                    <li>Diameter: </li>
-                    <li>Star: ${star}</li>
-                    <li>Distance from Earth: </li>
-                    <li>Number of Moons: </li>
+                    <li>Name: ${planetDestination.name}</li>
+                    <li>Diameter: ${planetDestination.diameter}</li>
+                    <li>Star: ${planetDestination.star}</li>
+                    <li>Distance from Earth: ${planetDestination.distance}</li>
+                    <li>Number of Moons: ${planetDestination.moons}</li>
                 </ol>
-                <img src="">
-   */
+                <img src="${planetDestination.imageUrl}">`
+   
 }
 
 function validateInput(testInput) {
@@ -29,8 +33,6 @@ function validateInput(testInput) {
 
    return answer;
 };
-
-console.log(validateInput(7));
 
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
@@ -58,9 +60,6 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
         const launchStatus = document.getElementById("launchStatus")
 
-        console.log(fuelLevelInput.value);
-        console.log(cargoLevelInput.value);
-
         if (validatedPilotInput === "Empty" || validatedPilotInput === "Is a number") {
             alert("Please enter a valid Pilot name.");
 
@@ -78,36 +77,53 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
         if (validatedFuelLevelInput === "Empty" || validatedFuelLevelInput === "Not a number") {
             alert("Please enter a valid fuel level.");
-        } else if (fuelLevelInput.value < 10000) {
+        } else if (validatedFuelLevelInput === "Is a number" && Number(fuelLevelInput.value) < 10000) {
             faultyItems.style.visibility = "visible";
             fuelStatus.innerHTML = `Not enough fuel for the journey.`;
             launchStatus.innerHTML = `Shuttle not ready for launch.`;
             launchStatus.style.color = "red";
+        } else if (validatedFuelLevelInput === "Is a number" && Number(fuelLevelInput.value) >= 10000 && Number(cargoLevelInput.value) < 10000) {
+            faultyItems.style.visibility = "visible";
+            launchStatus.innerHTML = `Shuttle ready for launch.`;
+            launchStatus.style.color = "green";
         }
 
         if (validatedCargoLevelInput === "Empty" || validatedCargoLevelInput === "Not a number") {
             alert("Please enter a valid cargo level.");
-        } else if (cargoLevelInput.value > 10000) {
+        } else if (validatedCargoLevelInput === "Is a number" && Number(cargoLevelInput.value) > 10000) {
             faultyItems.style.visibility = "visible";
             cargoStatus.innerHTML = `Too much mass for the shuttle to take off.`;
             launchStatus.innerHTML = `Shuttle not ready for launch.`;
             launchStatus.style.color = "red";
+        } else if (validatedCargoLevelInput === "Is a number" && Number(cargoLevelInput.value) < 10000 && Number(fuelLevelInput.value) >= 10000) {
+            faultyItems.style.visibility = "visible";
+            launchStatus.innerHTML = `Shuttle ready for launch.`;
+            launchStatus.style.color = "green";
         }
-        
     });
 }
 
 async function myFetch() {
-    const planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
-        response.json().then(function(json) {
-            console.log(json)
-;        });
-    return planetsReturned;
-    });
+    const planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json")
+    planetsReturned.then( function(response) {
+        const jsonPromise = response.json();
+        jsonPromise.then( function(json) {
+           console.log(json);
+        });
+    }); return planetsReturned;
 }
 
 function pickPlanet(planets) {
-    
+    const fetch = myFetch();
+    let randNum = 0;
+    for (i=0; i<6; i++){
+        randNum += Math.random().floor;
+        console.log(randNum);
+     } return randNum;
+
+    fetch.json().then(function (json) {
+        
+    })
 }
 
 module.exports = {
