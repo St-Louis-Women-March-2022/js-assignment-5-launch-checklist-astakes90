@@ -5,18 +5,17 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
    // Here is the HTML formatting for our mission target div.
 
    const missionTarget = document.getElementById("missionTarget");
-   const planetDestination = myFetch();
 
    missionTarget.innerHTML = 
 `                <h2>Mission Destination</h2>
                 <ol>
-                    <li>Name: ${planetDestination.name}</li>
-                    <li>Diameter: ${planetDestination.diameter}</li>
-                    <li>Star: ${planetDestination.star}</li>
-                    <li>Distance from Earth: ${planetDestination.distance}</li>
-                    <li>Number of Moons: ${planetDestination.moons}</li>
+                    <li>Name: ${name}</li>
+                    <li>Diameter: ${diameter}</li>
+                    <li>Star: ${star}</li>
+                    <li>Distance from Earth: ${distance}</li>
+                    <li>Number of Moons: ${moons}</li>
                 </ol>
-                <img src="${planetDestination.imageUrl}">`
+                <img src="${imageUrl}">`
    
 }
 
@@ -104,26 +103,19 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 }
 
 async function myFetch() {
-    const planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json")
-    planetsReturned.then( function(response) {
-        const jsonPromise = response.json();
-        jsonPromise.then( function(json) {
-           console.log(json);
-        });
-    }); return planetsReturned;
-}
+    const planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
+        response.json().then( function(json) {
+            console.log(json);
+         });
+    }); 
+};
 
 function pickPlanet(planets) {
-    const fetch = myFetch();
-    let randNum = 0;
-    for (i=0; i<6; i++){
-        randNum += Math.random().floor;
-        console.log(randNum);
-     } return randNum;
-
-    fetch.json().then(function (json) {
-        
-    })
+    //creating randomized num
+    let index = 0;
+    index += Math.floor(Math.random()*6);
+    //returning planet at index randNum
+    return planets[index];
 }
 
 module.exports = {
